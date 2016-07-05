@@ -102,13 +102,9 @@ die() {
 	echo "$*" 1>&2
 	if test "$MAILTO" ; then
 		{
-			echo "From: $MAILFROM"
-			echo "To: $MAILTO"
-			echo "Subject: $PRODUCT: $ME backup failed due to an error"
-			echo "Content-Type: text/plain; charset=UTF-8"
 			echo ""
 			echo "$*"
-		} | $SENDMAIL -f "$MAILFROM" $MAILTO
+		} | mailx -v -r $MAILFROM  -s "$PRODUCT: $ME backup failed due to an error" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
 	fi
 
 
@@ -727,17 +723,13 @@ extra_output_file=
 # what to send by email (but only if the mailstyle is not error and all went fine)
 if test "$MAILTO" && ! test "$MAILSTYLE" = errorreport -a "$backup_total" -eq "$backup_ok" ; then
 	{
-		echo "From: $MAILFROM"
-		echo "To: $MAILTO"
-		echo "Subject: $PRODUCT: $ME backup $(test "$backup_total" -eq "$backup_ok" && echo successful || echo failed)"
-		echo "Content-Type: text/plain; charset=UTF-8"
 		echo ""
 		case "$MAILSTYLE" in
 			all) cat $MYTEMP/output ;;
 			*report) cat $MYTEMP/{header,report,footer} ;;
 			*) die "ERROR: Unknown MAILSTYLE ['$MAILSTYLE'] !" ;;
 		esac
-	} | $SENDMAIL -f "$MAILFROM" $MAILTO
+	} | mailx -v -r $MAILFROM -s "$PRODUCT: $ME backup $(test "$backup_total" -eq "$backup_ok" && echo successful || echo failed)" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
 fi
 
 # export logfile if requested
