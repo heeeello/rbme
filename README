@@ -1,3 +1,20 @@
+
+# Some changes to original rbme:
+
+1. Add Dockerfile to let rbme run
+2. Add heirloom-mailx package, because it can specify SMTP relay host
+3. Use mailx to send mail in /usr/bin/rbme
+4. Add env variable: SMTP_HOST, SMTP_USER, SMTP_PASSWORD to specify external smtp server
+
+Start command:
+docker run -v /mnt/backup:/backup -v /root/.ssh:/root/.ssh/ -e RBME_MAILFROM=noreply@example.com -e RBME_MAILTO="user1@example.com user2@example.com"  -e SMTP_HOST=smtp.example.com:25  -e SMTP_USER=username -e SMTP_PASSWORD=password -it jimme/rbme
+
+
+
+
+original readme:
+#######
+
 RSYNC BACKUP MADE EASY
 
 About
