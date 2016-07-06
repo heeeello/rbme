@@ -18,9 +18,10 @@ ADD rbme /usr/bin/rbme
 ADD rbme.conf /etc/rbme.conf
 
 
-RUN locale-gen zh_CN.UTF-8
-RUN locale-gen en_US.UTF-8
-RUN dpkg-reconfigure locales
+## Just works on debian:jessie 
+RUN echo "zh_CN.UTF-8 UTF-8\nen_US.UTF-8 UTF-8" >>/etc/locale.gen && locale-gen
+ENV LC_ALL zh_CN.UTF-8     
+
 
 RUN echo "Asia/Shanghai" > /etc/timezone; dpkg-reconfigure -f noninteractive tzdata
 
