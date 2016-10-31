@@ -97,6 +97,7 @@ http://www.gnu.org/licenses/gpl.html for full text"
 VERSION=0
 RELEASE="$(echo "$CHANGES" | tail -n 2 | cut -c 1-10)"
 PRODUCT="RBME"
+PURPOSE="$PURPOSE"
 
 die() {
 	echo "$*" 1>&2
@@ -104,7 +105,7 @@ die() {
 		{
 			echo ""
 			echo "$*"
-		} | mailx -v -r $MAILFROM  -s "$PRODUCT: $ME backup failed due to an error" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
+		} | mailx -v -r $MAILFROM  -s "$PRODUCT: $ME $PURPOSE backup failed due to an error" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
 	fi
 
 
@@ -729,7 +730,7 @@ if test "$MAILTO" && ! test "$MAILSTYLE" = errorreport -a "$backup_total" -eq "$
 			*report) cat $MYTEMP/{header,report,footer} ;;
 			*) die "ERROR: Unknown MAILSTYLE ['$MAILSTYLE'] !" ;;
 		esac
-	} | mailx -v -r $MAILFROM -s "$PRODUCT: $ME backup $(test "$backup_total" -eq "$backup_ok" && echo successful || echo failed)" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
+	} | mailx -v -r $MAILFROM -s "$PRODUCT: $ME $PURPOSE backup $(test "$backup_total" -eq "$backup_ok" && echo successful || echo failed)" -S smtp=$SMTP_HOST -S smtp-auth=login -S smtp-auth-user="$SMTP_USER" -S smtp-auth-password="$SMTP_PASSWORD" $MAILTO
 fi
 
 # export logfile if requested

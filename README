@@ -5,18 +5,21 @@
 2. Add heirloom-mailx package, because it can specify SMTP relay host
 3. Use mailx to send mail in /usr/bin/rbme
 4. Add env variable: SMTP_HOST, SMTP_USER, SMTP_PASSWORD to specify external smtp server
+5. Add env variable: PURPOSE to describe what you want to backup, which will be used as email subject
 
 Start command:
 
 1. Enter bash and run rbme for test
 `
-docker run -v /mnt/backup:/backup -v /root/.ssh:/root/.ssh/ -e RBME_MAILFROM=noreply@example.com -e RBME_MAILTO="user1@example.com user2@example.com"  -e SMTP_HOST=smtp.example.com:25  -e SMTP_USER=username -e SMTP_PASSWORD=password -it jimme/rbme
+docker run -v /mnt/backup:/backup -v /root/.ssh:/root/.ssh/ -e PURPOSE="Backup my file server" -e RBME_MAILFROM=noreply@example.com -e RBME_MAILTO="user1@example.com user2@example.com"  -e SMTP_HOST=smtp.example.com:25  -e SMTP_USER=username -e SMTP_PASSWORD=password -it jimme/rbme
 `
 2. Backup my ftp server to a disk mounted to /mnt/backup
 `
-docker run --net=host -v /mnt/backup:/backup -v /root/.ssh:/root/.ssh/ -e RBME_MAILFROM=noreply@example.com -e RBME_MAILTO="user1@example.com user2@example.com"  -e SMTP_HOST=smtp.example.com:25  -e SMTP_USER=username -e SMTP_PASSWORD=password -it jimme/rbme rbme  127.0.0.1:/home/ftp
+docker run --net=host -v /mnt/backup:/backup -v /root/.ssh:/root/.ssh/ -e PURPOSE="Backup my file server" -e RBME_MAILFROM=noreply@example.com -e RBME_MAILTO="user1@example.com user2@example.com"  -e SMTP_HOST=smtp.example.com:25  -e SMTP_USER=username -e SMTP_PASSWORD=password -it jimme/rbme rbme  127.0.0.1:/home/ftp
 `
 
+Note:
+Please make sure you can ssh 127.0.0.1 without password, or else the backup will fail
 
 
 
